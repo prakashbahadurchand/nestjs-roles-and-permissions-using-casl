@@ -13,7 +13,11 @@ export class UsersService {
     ) { }
 
     async findOneByEmail(email: string): Promise<User | undefined> {
-        return this.usersRepository.findOne({ where: { email } });
+        // Explicitly select the password field for authentication purposes
+        return this.usersRepository.createQueryBuilder('user')
+            .addSelect('user.password')
+            .where('user.email = :email', { email })
+            .getOne();
     }
 
     async findOneById(id: number): Promise<User | undefined> {
