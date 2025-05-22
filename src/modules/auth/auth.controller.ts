@@ -7,6 +7,7 @@ import { LoginResponseDto } from './dto/login-response.dto';
 import { User } from '../users/entities/user.entity'; // Assuming User entity is defined
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
+import { ApiResponseDto } from '../../core/common/dto/api-response.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -15,9 +16,9 @@ export class AuthController {
 
     @Post('register')
     @ApiOperation({ summary: 'Register a new user' })
-    @ApiResponse({ status: 201, description: 'User successfully registered.', type: User })
-    @ApiResponse({ status: 400, description: 'Bad Request.' })
-    @ApiResponse({ status: 409, description: 'Conflict. Email already exists.' })
+    @ApiResponse({ status: 201, description: 'User successfully registered.', type: ApiResponseDto<User> })
+    @ApiResponse({ status: 400, description: 'Bad Request.', type: ApiResponseDto<null> })
+    @ApiResponse({ status: 409, description: 'Conflict. Email already exists.', type: ApiResponseDto<null> })
     async register(@Body() registerAuthDto: RegisterAuthDto): Promise<Omit<User, 'password'>> {
         return this.authService.register(registerAuthDto);
     }
@@ -25,8 +26,8 @@ export class AuthController {
     @Post('login')
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Log in an existing user' })
-    @ApiResponse({ status: 200, description: 'User successfully logged in.', type: LoginResponseDto })
-    @ApiResponse({ status: 401, description: 'Unauthorized. Invalid credentials.' })
+    @ApiResponse({ status: 200, description: 'User successfully logged in.', type: ApiResponseDto<LoginResponseDto> })
+    @ApiResponse({ status: 401, description: 'Unauthorized. Invalid credentials.', type: ApiResponseDto<null> })
     async login(@Body() loginAuthDto: LoginAuthDto): Promise<LoginResponseDto> {
         return this.authService.login(loginAuthDto);
     }
@@ -36,8 +37,8 @@ export class AuthController {
     @ApiBearerAuth()
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Log out the current user' })
-    @ApiResponse({ status: 200, description: 'User successfully logged out.' })
-    @ApiResponse({ status: 401, description: 'Unauthorized.' })
+    @ApiResponse({ status: 200, description: 'User successfully logged out.', type: ApiResponseDto<{ message: string }> })
+    @ApiResponse({ status: 401, description: 'Unauthorized.', type: ApiResponseDto<null> })
     async logout(@Req() req: Request): Promise<{ message: string }> {
         const token = req.headers.authorization?.split(' ')?.[1];
         return this.authService.logout(token || '');

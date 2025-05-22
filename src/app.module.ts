@@ -6,6 +6,8 @@ import { User } from './modules/users/entities/user.entity';
 import { Article } from './modules/articles/entities/article.entity';
 import { CaslModule } from './modules/casl/casl.module';
 import { ArticlesModule } from './modules/articles/articles.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ResponseTransformInterceptor } from './core/common/interceptors/response-transform.interceptor';
 
 @Module({
   imports: [
@@ -25,6 +27,11 @@ import { ArticlesModule } from './modules/articles/articles.module';
     ArticlesModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseTransformInterceptor,
+    },
+  ],
 })
 export class AppModule { }

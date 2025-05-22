@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { User, Role } from './entities/user.entity'; // Import Role enum
 import { RegisterAuthDto } from '../auth/dto/register-auth.dto';
 import * as bcrypt from 'bcrypt';
 
@@ -25,7 +25,7 @@ export class UsersService {
         const newUser = this.usersRepository.create({
             ...registerAuthDto,
             password: hashedPassword,
-            // roles will default to [Role.READER] as per entity definition
+            roles: [Role.READER], // Explicitly set default role here
         });
         await this.usersRepository.save(newUser);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
