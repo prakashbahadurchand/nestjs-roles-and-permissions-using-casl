@@ -23,7 +23,6 @@ export class User {
 
     @Column({
         type: 'simple-array',
-        default: [Role.READER], // Default role
     })
     roles: Role[];
 

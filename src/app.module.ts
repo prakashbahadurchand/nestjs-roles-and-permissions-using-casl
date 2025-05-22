@@ -11,13 +11,13 @@ import { ArticlesModule } from './modules/articles/articles.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost', // Replace with your DB host
-      port: 3306, // Replace with your DB port
-      username: 'root', // Replace with your DB username
-      password: 'toor', // Replace with your DB password
-      database: 'nestjs_casl_demo', // Replace with your DB name
-      entities: [User, Article], // Add other entities here
-      synchronize: true, // true for development, false for production
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: 'toor',
+      database: 'nestjs_casl_demo',
+      entities: [User, Article],
+      synchronize: true,
     }),
     AuthModule,
     UsersModule,
